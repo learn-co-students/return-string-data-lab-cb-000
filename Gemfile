@@ -38,7 +38,7 @@ group :development, :test do
   gem 'byebug'
   gem 'rspec-rails'
   gem 'capybara'
-  gem 'faker'
+  gem 'faker', :git => 'git://github.com/stympy/faker.git', :branch => 'master'
   gem 'shoulda'
   gem 'poltergeist', '~> 1.14.0'
 end

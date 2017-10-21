@@ -1,1 +1,7 @@
-
+<h1>Products</h1>
+<div>
+  <% @products.each_with_index do |p, i| %>
+    <p><%= i+1 %>. <%= p.name %></p>
+    <%= p.description %>
+    <%end%>
+</div>
