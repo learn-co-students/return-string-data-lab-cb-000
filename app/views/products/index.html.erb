@@ -1,1 +1,35 @@
+<h1>Products</h1>
+<div>
+  <% @products.each_with_index do |p, i| %>
+    <p><%= i+1 %>. <%= p.name %></p>
+    <p id="des-body-<%= p.id %>"><%= truncate p.description %></p><br>
+    <p id="inv-body-<%= p.id %>"><p>
+    <button class="js-more" data-id="<%= p.id %>">More Info</button>
+    <%end%>
+</div><br>
 
+<%= button_to "New Product",new_product_path %>
+
+<script type="text/javascript">
+  $(".js-more").on('click', function(){
+     var id = $(this).data("id");
+     $.get("/products/" + id + "/description", function(response){
+        $("#des-body-" + id).text(response);
+
+      //alert(response);
+     });
+     $.get("products/" + id + "/inventory", function(response){
+
+       if (response === "true"){
+      //   alert("Available");
+          $("#inv-body-" + id).text("Available");
+        }
+
+       else {
+        // alert("Sold Out");
+           $("#inv-body-" + id).text("Sold Out");
+       }
+
+     });
+  });
+</script>
