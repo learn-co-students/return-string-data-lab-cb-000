@@ -1,9 +1,9 @@
 <% @products.each do |product| %>
 <h1><%= product.name %></h1><br>
 
-<div id="description- <% product.id %> "><%= truncate product.description %></div>
-<div id="inventory- <%= product.id %> "></div>
-<p> <button class="js-more" data-id=" <%= product.id %> ">More Info</button> </p>
+<div id="description-<%= product.id %>"><%= truncate product.description %></div>
+<div id="inventory-<%= product.id %>"></div>
+<p> <button class="js-more" data-id="<%= product.id %>">More Info</button> </p>
 <% end %>
 <script type="text/javascript">
   $(function() {
@@ -13,6 +13,7 @@
         $("#description-"+id).text(data)
       })
       $.get("/products/"+id+"/inventory", function(data){
+        debugger
         if(data === "true"){
           $("#inventory-"+id).text("Available")
         } else {
