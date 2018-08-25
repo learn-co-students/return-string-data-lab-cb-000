@@ -4,10 +4,9 @@
     <%= content_tag :strong, product.name %>
   </div>
   <div class="body">
-    <%= product.description %>
   </div>
   <div>
-    <%= link_to('Click me', '#', class: 'js-more', 'data-id': product.id) %>
+    <%= button_tag 'More Info', class: 'js-more', data: {id: product.id} %>
   </div>
 <% end %>
 
@@ -16,12 +15,13 @@
     $(".js-more").on('click', function(){
       var p_id =  $(this).data('id');
 
-      $("#product-" + p_id).text("");
+      $("#product_" +p_id+" div.body").text("");
       $.get("/products/" + p_id + "/description", function(resp) {
-        $(".product_" +p_id+" div.body").append(resp);
+        $("#product_" +p_id+" div.body").append(resp);
       });
       $.get("/products/" + p_id + "/inventory", function(resp) {
-        $(".product_" +p_id+" div.body").append(resp);
+         let r = (resp == 'true') ? "Available" : "Sold Out"
+        $("#product_" +p_id+" div.body").append("<br>" + r);
       });
 
     });
