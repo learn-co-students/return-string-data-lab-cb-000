@@ -1,28 +1,27 @@
 <%= content_tag :h1, "Products" %>
 <%= div_for @products do |product| %>
   <div>
-    <%= product.name %>
+    <%= content_tag :strong, product.name %>
   </div>
   <div class="body">
-    <%= truncate product.description %>
+    <%= product.description %>
   </div>
   <div>
-    <%= button "More Info", class: 'js-more' %>
+    <%= link_to('Click me', '#', class: 'js-more', 'data-id': product.id) %>
   </div>
 <% end %>
 
 <script type="text/javascript" charset="utf-8">
   $(function(){
     $(".js-more").on('click', function(){
-      var p_class = $(this).attr('class');
-      var p_id = p_class.replace("product_", "")
+      var p_id =  $(this).data('id');
 
       $("#product-" + p_id).text("");
       $.get("/products/" + p_id + "/description", function(resp) {
-        $(p_class+" div.body").append(resp);
+        $(".product_" +p_id+" div.body").append(resp);
       });
       $.get("/products/" + p_id + "/inventory", function(resp) {
-        $(p_class+" div.body").append(resp);
+        $(".product_" +p_id+" div.body").append(resp);
       });
 
     });

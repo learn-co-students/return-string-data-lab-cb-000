@@ -3,9 +3,8 @@ Rails.application.routes.draw do
   resources :orders
   resources :invoices
   resources :products, only: [:index, :new, :create] do
-    collection do
-      get 'description'
-      get 'inventory'
-    end
+      get 'description', on: :member
+      get 'inventory', on: :member
   end
+  root 'products#index'
 end
