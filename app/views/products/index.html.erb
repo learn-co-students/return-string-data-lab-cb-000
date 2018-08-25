@@ -1,29 +1,24 @@
-<%= content_tag :h1, "Products" %>
-<%= div_for @products do |product| %>
-  <div>
-    <%= content_tag :strong, product.name %>
-  </div>
-  <div class="body">
-  </div>
-  <div>
-    <%= button_tag 'More Info', class: 'js-more', data: {id: product.id} %>
-  </div>
+<h1>Products</h1>
+<% @products.each do |product| %>
+  <h3><%= product.name %></h3>
+  <div id="product-<%= product.id %>"><%= truncate(product.description) %></div>
+  <button class="js-more" data-id="<%= product.id %>">More Info</button>
 <% end %>
 
 <script type="text/javascript" charset="utf-8">
-  $(function(){
-    $(".js-more").on('click', function(){
-      var p_id =  $(this).data('id');
-
-      $("#product_" +p_id+" div.body").text("");
-      $.get("/products/" + p_id + "/description", function(resp) {
-        $("#product_" +p_id+" div.body").append(resp);
+$(function() {
+  $(".js-more").on("click", function() {
+    var id = $(this).data("id");
+    $.get("/products/" + id + "/description", function(description) {
+      $.get("/products/" + id + "/inventory", function(inventory) {
+        var inventoryText = "<strong>Available</strong>";
+        if(inventory === "false"){
+          inventoryText = "<strong>Sold Out</strong>";
+        }
+        var descriptionText = "<p>" + description + "</p><p>" + inventoryText + "</p>";
+        $("#product-" + id).html(descriptionText);
       });
-      $.get("/products/" + p_id + "/inventory", function(resp) {
-         let r = (resp == 'true') ? "Available" : "Sold Out"
-        $("#product_" +p_id+" div.body").append("<br>" + r);
-      });
-
     });
   });
+});
 </script>
