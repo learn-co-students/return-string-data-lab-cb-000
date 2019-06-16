@@ -4,18 +4,18 @@
 
 <script type="text/javascript" charset="utf-8">
 $(function () {
-  $(".js-more").on('click', function() {
-    let id = $(this).data("id");
-    $.get("/products/" + id + "/description", function(data) {
+  $(".js-more").on("click", function() {
+    const id = $(this).data("id");
+    $.get("/products/" + id + "/description", function(description) {
       // Replace text of body-id div
-      $("#body-" + id).text(data);
-    });
-    $.get("/products/" + id + "/inventory", function(data) {
-      if (data === "true") {
-        $("#body-" + id).append(" - Available");
-      } else {
-        $("#body-" + id).append(" - Sold Out");
-      }
+      $("#body-" + id).text(description);
+      $.get("/products/" + id + "/inventory", function(available) {
+        if (available === "true") {
+          $("#body-" + id).append(" - Available");
+        } else {
+          $("#body-" + id).append(" - Sold Out");
+        }
+      });
     });
   });
 });
