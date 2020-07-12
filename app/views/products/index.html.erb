@@ -1,1 +1,51 @@
+<h1>Products</h1>
 
+<uL>
+  <% @products.each do |p| %>
+    <li><%= p.name %> <%= p.price %> <i><span class="status-<%=p.id%>"></span></i>
+      <div id="product-<%=p.id%>">
+        <%= truncate(p.description) %>
+      </div>
+      <button class="js-more" data-id="<%= p.id %>">More Info</button>
+    </li>
+  <% end %>
+</ul>
+
+<script>
+
+  $(".js-more").on("click", function() {
+    let id = $(this).data("id");
+    $.get(`/products/${id}/description`, function(description) {
+      $.get(`/products/${id}/inventory`, function(inventory) {
+        let inventoryText = "<strong>Available</strong>";
+        if(inventory === "false"){
+          inventoryText = "<strong>Sold Out</strong>";
+        }
+        let descriptionText = description;
+        $(`#product-${id}`).html(descriptionText);
+        $(`.status-${id}`).html(inventoryText);
+      });
+    });
+    $(this).replaceWith("<br>");
+  });
+
+  // I want to know more about why the below pattern concept doesn't work. Played with it for a long time, and the below is what was left at the moment I surrendered. Why do the two .get calls need to be nested? That goes against my instincts. I also had the first part (the description injection functionality) working perfectly, before adding the second get, but the specs refused to pass it. Do a get, do something with the result. Do another get, do something with that result. Then process the html. Seems like a clear strategy to me. Grrrrr this lab is trying to make me hate JS!!
+
+  // $(function(){
+  //   $(".js-more").on("click", function(){
+  //     let id = $(this).data("id");
+  //     let description = "";
+  //     let status = "";
+  //     $.get("/products/" + id + "/description", function(data){
+  //       description = data;
+  //     });
+  //     $.get("/products/" + id + "/inventory", function(data){
+  //       status = data;
+  //     });
+  //     if(status === "true"){
+  //       status = "Available";}
+  //       else { status = "Sold Out";}
+  //     $(`#product-${id}`).text(description);
+  //   });
+  // });
+</script>
